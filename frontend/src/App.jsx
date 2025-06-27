@@ -8,19 +8,20 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [showUsers, setShowUsers] = useState(false);
 
+  const API_BASE = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
-    // Initial backend and test data
-    fetch('http://localhost:5000/')
+    fetch(`${API_BASE}/`)
       .then(res => res.text())
       .then(data => setMsg(data));
 
-    fetch('http://localhost:5000/api/data')
+    fetch(`${API_BASE}/api/data`)
       .then(res => res.json())
       .then(data => setUser(data));
   }, []);
 
   const fetchAllUsers = async () => {
-    const res = await fetch('http://localhost:5000/api/users');
+    const res = await fetch(`${API_BASE}/api/users`);
     const data = await res.json();
     setAllUsers(data);
     setShowUsers(true);
@@ -32,7 +33,8 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:5000/api/users', {
+
+    const res = await fetch(`${API_BASE}/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
@@ -41,7 +43,7 @@ function App() {
     const data = await res.json();
     setCreatedUser(data.user);
     setForm({ name: '', email: '' });
-    setShowUsers(false); // hide user list until button clicked again
+    setShowUsers(false); // Hide old list after submission
   };
 
   return (
